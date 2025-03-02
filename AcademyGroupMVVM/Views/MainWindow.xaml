@@ -68,13 +68,6 @@
                 <Button Content="Список студентов" Command="{Binding RefreshEmployeeCommand}" Background="#BB86FC" Foreground="White" Padding="10,5" Margin="5,10" />
 
                 <StackPanel Margin="0,10">
-                    <TextBlock Text="Поиск сотрудников" FontSize="16" FontWeight="Bold" Foreground="#BB86FC"/>
-                    <TextBlock Text="Имя:" FontSize="12" FontWeight="Bold" Foreground="#BB86FC"/>
-                    <TextBox Text="{Binding SearchName, UpdateSourceTrigger=PropertyChanged}"  Padding="5" Margin="0,5,0,5" BorderBrush="#BB86FC" BorderThickness="2" Background="#2D2D2D" Foreground="White"/>
-                    <TextBlock Text="Фамилия:" FontSize="12" FontWeight="Bold" Foreground="#BB86FC"/>
-                    <TextBox Text="{Binding SearchLastName, UpdateSourceTrigger=PropertyChanged}" Padding="5" Margin="0,5,0,5" BorderBrush="#BB86FC" BorderThickness="2" Background="#2D2D2D" Foreground="White"/>
-                    <TextBlock Text="Позиция:" FontSize="12" FontWeight="Bold" Foreground="#BB86FC"/>
-                    <TextBox Text="{Binding SearchPosition, UpdateSourceTrigger=PropertyChanged}"  Padding="5" Margin="0,5,0,5" BorderBrush="#BB86FC" BorderThickness="2" Background="#2D2D2D" Foreground="White"/>
                     <Button Content="Поиск" Command="{Binding SearchEmployeeCommand}" Background="#03DAC5" Foreground="Black" Padding="10,5" Margin="5,5,0,5"/>
                 </StackPanel>
 

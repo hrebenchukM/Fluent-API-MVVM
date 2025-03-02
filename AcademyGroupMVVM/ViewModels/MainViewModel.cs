@@ -2,6 +2,7 @@
 using AcademyGroupMVVM.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Input;
 
@@ -32,8 +33,8 @@ namespace AcademyGroupMVVM.ViewModels
         }
 
 
-        private bool isSearching;
-        public bool IsSearching
+        private bool isSearching = true;
+        public bool IsSearching 
         {
             get { return isSearching; }
             set
@@ -44,49 +45,6 @@ namespace AcademyGroupMVVM.ViewModels
             }
         }
 
-
-        private string searchName;
-        public string SearchName
-        {
-            get
-            {
-                return searchName;
-            }
-            set
-            {
-                searchName = value;
-                OnPropertyChanged(nameof(SearchName));
-            }
-        }
-
-
-        private string searchLastName;
-        public string SearchLastName
-        {
-            get
-            {
-                return searchLastName;
-            }
-            set
-            {
-                searchLastName = value;
-                OnPropertyChanged(nameof(SearchLastName));
-            }
-        }
-
-        private string searchPosition;
-        public string SearchPosition
-        {
-            get
-            {
-                return searchPosition;
-            }
-            set
-            {
-                searchPosition = value;
-                OnPropertyChanged(nameof(SearchPosition));
-            }
-        }
 
 
         private string name;
@@ -208,9 +166,10 @@ namespace AcademyGroupMVVM.ViewModels
                 using (var db = new CompanyContext())
                 {
                     var employees = from e in db.Employees
-                                    where (string.IsNullOrEmpty(SearchName) || e.FirstName.Contains(SearchName)) &&
-                                          (string.IsNullOrEmpty(SearchLastName) || e.LastName.Contains(SearchLastName)) &&
-                                          (string.IsNullOrEmpty(SearchPosition) || e.Position.Contains(SearchPosition))
+                                    where (string.IsNullOrEmpty(FirstName) || e.FirstName.Contains(FirstName)) &&
+                                          (string.IsNullOrEmpty(LastName) || e.LastName.Contains(LastName)) &&
+                                          (Age == 0 || e.Age == Age) &&
+                                          (string.IsNullOrEmpty(Position) || e.Position.Contains(Position))
                                     select e;
                     FilteredEmployeesList = new ObservableCollection<EmployeeViewModel>(employees.Select(e => new EmployeeViewModel(e)));
                     OnPropertyChanged(nameof(FilteredEmployeesList));
