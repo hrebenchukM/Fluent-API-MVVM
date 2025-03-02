@@ -51,7 +51,7 @@ namespace AcademyGroupMVVM.ViewModels
             }
         }
 
-        public string GroupName
+        public string CompanyName
         {
             get { return employee.Company.Name; }
         }

@@ -33,11 +33,28 @@ namespace AcademyGroupMVVM.Models
         public DbSet<Employee> Employees { get; set; }
         public CompanyContext() : base(_options)
         {
-            Database.EnsureDeleted();
-            Database.EnsureCreated();
+           
+            if (Database.EnsureCreated()) 
+            {
+
+                Company company1 = new Company { Name = "Luxoft" };
+                Company company2 = new Company { Name = "Rozetka" };
+                Company company3 = new Company { Name = "DataArt" };
+                Companies?.Add(company1);
+                Companies?.Add(company2);
+                Companies?.Add(company3);
+                Employees?.Add(new Employee { FirstName = "Богдан", LastName = "Иваненко", Age = 20, Position = "Fullstack developer", Company = company1 });
+                Employees?.Add(new Employee { FirstName = "Анна", LastName = "Шевченко", Age = 23, Position = "Front-end developer", Company = company2 });
+                Employees?.Add(new Employee { FirstName = "Петро", LastName = "Петренко", Age = 25, Position = "Backend developer", Company = company3 });
+                Employees?.Add(new Employee { FirstName = "Елена", LastName = "Артемьева", Age = 42, Position = "Manual QA Engineer", Company = company1 });
+                Employees?.Add(new Employee { FirstName = "Елена", LastName = "Алексеева", Age = 47, Position = "Automation QA Engineer", Company = company2 });
+                Employees?.Add(new Employee { FirstName = "Виктория", LastName = "Бабенко", Age = 29, Position = "Team Lead", Company = company3 });
+
+                SaveChanges();
+            }
 
         }
-        
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -72,12 +89,10 @@ namespace AcademyGroupMVVM.Models
             // Настройка строк
             modelBuilder.Entity<Employee>().Property(p => p.FirstName).HasMaxLength(20);
             modelBuilder.Entity<Employee>().Property(p => p.LastName).HasMaxLength(20);
-            modelBuilder.Entity<Employee>().Property(p => p.FirstName).IsUnicode(false);
-            modelBuilder.Entity<Employee>().Property(p => p.LastName).IsUnicode(false);
+            modelBuilder.Entity<Employee>().Property(p => p.FirstName).IsUnicode(true);
+            modelBuilder.Entity<Employee>().Property(p => p.LastName).IsUnicode(true);
 
           
-            // Настройка типа столбцов
-            modelBuilder.Entity<Employee>().Property(p => p.Position).HasColumnType("varchar").HasMaxLength(20);
 
 
        

@@ -15,15 +15,15 @@
         <Border Background="#2C2C2C" CornerRadius="15" Padding="20" Margin="10" Grid.Column="0">
             <StackPanel>
                 <TextBlock Text="Название группы:" FontSize="16" FontWeight="Bold" Foreground="#BB86FC"/>
-                <TextBox Text="{Binding GroupName, UpdateSourceTrigger=PropertyChanged}" Padding="10" Margin="0,5,0,15" BorderBrush="#BB86FC" BorderThickness="2" Background="#2D2D2D" Foreground="White"/>
+                <TextBox Text="{Binding CompanyName, UpdateSourceTrigger=PropertyChanged}" Padding="10" Margin="0,5,0,15" BorderBrush="#BB86FC" BorderThickness="2" Background="#2D2D2D" Foreground="White"/>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Content="Добавить" Command="{Binding AddGroupCommand}" Background="#03DAC5" Foreground="Black" Padding="10,5"/>
-                    <Button Content="Удалить" Command="{Binding RemoveGroupCommand}" Margin="5,0" Background="#CF6679" Foreground="White" Padding="10,5"/>
-                    <Button Content="Изменить" Command="{Binding UpdateGroupCommand}" Background="#F4B400" Foreground="Black" Padding="10,5"/>
+                    <Button Content="Добавить" Command="{Binding AddCompanyCommand}" Background="#03DAC5" Foreground="Black" Padding="10,5"/>
+                    <Button Content="Удалить" Command="{Binding RemoveCompanyCommand}" Margin="5,0" Background="#CF6679" Foreground="White" Padding="10,5"/>
+                    <Button Content="Изменить" Command="{Binding UpdateCompanyCommand}" Background="#F4B400" Foreground="Black" Padding="10,5"/>
                 </StackPanel>
-                <Button Content="Список групп" Command="{Binding RefreshGroupCommand}" Background="#BB86FC" Foreground="White" Padding="10,5" Margin="5,10"/>
+                <Button Content="Список групп" Command="{Binding RefreshCompanyCommand}" Background="#BB86FC" Foreground="White" Padding="10,5" Margin="5,10"/>
 
-                <ComboBox ItemsSource="{Binding GroupsList}" IsSynchronizedWithCurrentItem="True" SelectedIndex="{Binding Index_selected_groups}" Background="#2D2D2D" Foreground="White">
+                <ComboBox ItemsSource="{Binding CompaniesList}" IsSynchronizedWithCurrentItem="True" SelectedIndex="{Binding Index_selected_companies}" Background="#2D2D2D" Foreground="White">
                     
                     <ComboBox.ItemTemplate>
                     <DataTemplate>
@@ -53,37 +53,37 @@
                     <TextBox Text="{Binding Age, UpdateSourceTrigger=PropertyChanged}" Padding="10" Margin="0,5,0,10" BorderBrush="#BB86FC" BorderThickness="2" Background="#2D2D2D" Foreground="White"/>
                 </StackPanel>
                 <StackPanel>
-                    <TextBlock Text="Средний балл:" FontSize="16" FontWeight="Bold" Foreground="#BB86FC"/>
-                    <TextBox Text="{Binding GPA, UpdateSourceTrigger=PropertyChanged}" Padding="10" Margin="0,5,0,10" BorderBrush="#BB86FC" BorderThickness="2" Background="#2D2D2D" Foreground="White"/>
+                    <TextBlock Text="Позиция:" FontSize="16" FontWeight="Bold" Foreground="#BB86FC"/>
+                    <TextBox Text="{Binding Position, UpdateSourceTrigger=PropertyChanged}" Padding="10" Margin="0,5,0,10" BorderBrush="#BB86FC" BorderThickness="2" Background="#2D2D2D" Foreground="White"/>
                 </StackPanel>
          </StackPanel>
         </Border>
         <Border Background="#2C2C2C" CornerRadius="15" Padding="20" Margin="10" Grid.Column="2">
         <StackPanel >
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-                    <Button Content="Добавить" Command="{Binding AddStudentCommand}" Background="#03DAC5" Foreground="Black" Padding="10,5" />
-                    <Button Content="Удалить"  Command="{Binding RemoveStudentCommand}"  Background="#CF6679" Margin="5,0"  Foreground="White" Padding="10,5"/>
-                    <Button Content="Изменить" Command="{Binding UpdateStudentCommand}" Background="#F4B400" Foreground="Black" Padding="10,5"/>
+                    <Button Content="Добавить" Command="{Binding AddEmployeeCommand}" Background="#03DAC5" Foreground="Black" Padding="10,5" />
+                    <Button Content="Удалить"  Command="{Binding RemoveEmployeeCommand}"  Background="#CF6679" Margin="5,0"  Foreground="White" Padding="10,5"/>
+                    <Button Content="Изменить" Command="{Binding UpdateEmployeeCommand}" Background="#F4B400" Foreground="Black" Padding="10,5"/>
             </StackPanel>
-                <Button Content="Список студентов" Command="{Binding RefreshStudentCommand}" Background="#BB86FC" Foreground="White" Padding="10,5" Margin="5,10" />
-                <ComboBox ItemsSource="{Binding StudentsList}" IsSynchronizedWithCurrentItem="True" SelectedIndex="{Binding  Index_selected_students}"  Background="#2D2D2D" Foreground="White">
+                <Button Content="Список студентов" Command="{Binding RefreshEmployeeCommand}" Background="#BB86FC" Foreground="White" Padding="10,5" Margin="5,10" />
+                <ComboBox ItemsSource="{Binding EmployeesList}" IsSynchronizedWithCurrentItem="True" SelectedIndex="{Binding  Index_selected_employees}"  Background="#2D2D2D" Foreground="White">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
-                            <Border BorderBrush="#BB86FC" BorderThickness="1" Padding="10" CornerRadius="5">
+                            <Border BorderBrush="#BB86FC" BorderThickness="1"  CornerRadius="5">
                                 <StackPanel Margin="10">
-                                    <TextBlock Text="{Binding FirstName}" FontSize="16" FontWeight="Bold" Foreground="#03DAC5"/>
-                                    <TextBlock Text="{Binding LastName}" FontSize="16" FontWeight="Bold" Foreground="#BB86FC"/>
+                                    <TextBlock Text="{Binding FirstName}" FontSize="14" FontWeight="Bold" Foreground="#03DAC5"/>
+                                    <TextBlock Text="{Binding LastName}" FontSize="14" FontWeight="Bold" Foreground="#BB86FC"/>
                                 <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="Возраст:" FontSize="14" Foreground="Black" />
-                                        <TextBlock Text="{Binding Age}" FontSize="14" Foreground="Black"/>
+                                        <TextBlock Text="Возраст:" FontSize="12" Foreground="Black" />
+                                        <TextBlock Text="{Binding Age}" FontSize="12" Foreground="Black"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="Средний балл:" FontSize="14" Foreground="Black" />
-                                        <TextBlock Text="{Binding GPA}" FontSize="14" Foreground="Black"/>
+                                        <TextBlock Text="Позиция:" FontSize="12" Foreground="Black" />
+                                        <TextBlock Text="{Binding Position}" FontSize="12" Foreground="Black"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="Группа:" FontSize="14" Foreground="Black"/>
-                                        <TextBlock Text="{Binding GroupName}" FontSize="14" Foreground="Black"/>
+                                        <TextBlock Text="Компания:" FontSize="12" Foreground="Black"/>
+                                        <TextBlock Text="{Binding CompanyName}" FontSize="12" Foreground="Black"/>
                                 </StackPanel>
                             </StackPanel>
                         </Border>

@@ -33,27 +33,27 @@ namespace AcademyGroupMVVM.ViewModels
             }
         }
 
-        private int index_selected_groups = -1;
+        private int index_selected_companies = -1;
 
-        public int Index_selected_groups
+        public int Index_selected_companies
         {
-            get { return index_selected_groups; }
+            get { return index_selected_companies; }
             set
             {
-                index_selected_groups = value;
-                OnPropertyChanged(nameof(Index_selected_groups));
+                index_selected_companies = value;
+                OnPropertyChanged(nameof(Index_selected_companies));
             }
         }
 
-        private int index_selected_students = -1;
+        private int index_selected_employees = -1;
 
-        public int Index_selected_students
+        public int Index_selected_employees
         {
-            get { return index_selected_students; }
+            get { return index_selected_employees; }
             set
             {
-                index_selected_students = value;
-                OnPropertyChanged(nameof(Index_selected_students));
+                index_selected_employees = value;
+                OnPropertyChanged(nameof(Index_selected_employees));
             }
         }
 
@@ -117,29 +117,29 @@ namespace AcademyGroupMVVM.ViewModels
             }
         }
 
-        private DelegateCommand refreshGroupCommand;
+        private DelegateCommand refreshCompanyCommand;
 
-        public ICommand RefreshGroupCommand
+        public ICommand RefreshCompanyCommand
         {
             get
             {
-                if (refreshGroupCommand == null)
+                if (refreshCompanyCommand == null)
                 {
-                    refreshGroupCommand = new DelegateCommand(param => RefreshGroup(), null);
+                    refreshCompanyCommand = new DelegateCommand(param => RefreshCompany(), null);
                 }
-                return refreshGroupCommand;
+                return refreshCompanyCommand;
             }
         }
 
-        private void RefreshGroup()
+        private void RefreshCompany()
         {
             try
             {
                 using (var db = new CompanyContext())
                 {
-                    var groups = from g in db.Companies
+                    var companies = from g in db.Companies
                                  select g;
-                    CompaniesList = new ObservableCollection<CompanyViewModel>(groups.Select(g => new CompanyViewModel(g)));
+                    CompaniesList = new ObservableCollection<CompanyViewModel>(companies.Select(g => new CompanyViewModel(g)));
                     OnPropertyChanged(nameof(CompaniesList));
                 }
             }
@@ -149,32 +149,32 @@ namespace AcademyGroupMVVM.ViewModels
             }
         }
 
-        private DelegateCommand refreshStudentCommand;
+        private DelegateCommand refreshEmployeeCommand;
 
-        public ICommand RefreshStudentCommand
+        public ICommand RefreshEmployeeCommand
         {
             get
             {
-                if (refreshStudentCommand == null)
+                if (refreshEmployeeCommand == null)
                 {
-                    refreshStudentCommand = new DelegateCommand(param => RefreshStudent(), null);
+                    refreshEmployeeCommand = new DelegateCommand(param => RefreshEmployee(), null);
                 }
-                return refreshStudentCommand;
+                return refreshEmployeeCommand;
             }
         }
 
-        private void RefreshStudent()
+        private void RefreshEmployee()
         {
             try
             {
                 using (var db = new CompanyContext())
                 {
-                    var groups = from g in db.Companies
+                    var companies = from g in db.Companies
                                  select g;
-                    var students = from st in db.Employees
+                    var employees = from st in db.Employees
                                    select st;
-                    CompaniesList = new ObservableCollection<CompanyViewModel>(groups.Select(g => new CompanyViewModel(g)));
-                    EmployeesList = new ObservableCollection<EmployeeViewModel>(students.Select(st => new EmployeeViewModel(st)));
+                    CompaniesList = new ObservableCollection<CompanyViewModel>(companies.Select(g => new CompanyViewModel(g)));
+                    EmployeesList = new ObservableCollection<EmployeeViewModel>(employees.Select(st => new EmployeeViewModel(st)));
                     OnPropertyChanged(nameof(CompaniesList));
                     OnPropertyChanged(nameof(EmployeesList));
                 }
@@ -185,49 +185,49 @@ namespace AcademyGroupMVVM.ViewModels
             }
         }
 
-        private DelegateCommand addGroupCommand;
+        private DelegateCommand addCompanyCommand;
 
-        public ICommand AddGroupCommand
+        public ICommand AddCompanyCommand
         {
             get
             {
-                if (addGroupCommand == null)
+                if (addCompanyCommand == null)
                 {
-                    addGroupCommand = new DelegateCommand(param => AddGroup(), param => CanAddGroup());
+                    addCompanyCommand = new DelegateCommand(param => AddCompany(), param => CanAddCompany());
                 }
-                return addGroupCommand;
+                return addCompanyCommand;
             }
         }
 
-        private DelegateCommand removeGroupCommand;
+        private DelegateCommand removeCompanyCommand;
 
-        public ICommand RemoveGroupCommand
+        public ICommand RemoveCompanyCommand
         {
             get
             {
-                if (removeGroupCommand == null)
+                if (removeCompanyCommand == null)
                 {
-                    removeGroupCommand = new DelegateCommand(param => RemoveGroup(), param => CanRemoveGroup());
+                    removeCompanyCommand = new DelegateCommand(param => RemoveCompany(), param => CanRemoveCompany());
                 }
-                return removeGroupCommand;
+                return removeCompanyCommand;
             }
         }
 
-        private DelegateCommand updateGroupCommand;
+        private DelegateCommand updateCompanyCommand;
 
-        public ICommand UpdateGroupCommand
+        public ICommand UpdateCompanyCommand
         {
             get
             {
-                if (updateGroupCommand == null)
+                if (updateCompanyCommand == null)
                 {
-                    updateGroupCommand = new DelegateCommand(param => UpdateGroup(), param => CanUpdateGroup());
+                    updateCompanyCommand = new DelegateCommand(param => UpdateCompany(), param => CanUpdateCompany());
                 }
-                return updateGroupCommand;
+                return updateCompanyCommand;
             }
         }
 
-        private void AddGroup()
+        private void AddCompany()
         {
             try
             {
@@ -247,16 +247,16 @@ namespace AcademyGroupMVVM.ViewModels
             }
         }
 
-        private bool CanAddGroup()
+        private bool CanAddCompany()
         {
             return !CompanyName.IsNullOrEmpty();
         }
 
-        private void RemoveGroup()
+        private void RemoveCompany()
         {
             try
             {
-                var delcompany = CompaniesList[Index_selected_groups];
+                var delcompany = CompaniesList[Index_selected_companies];
                 DialogResult result = MessageBox.Show("Вы действительно желаете удалить IT-Компанию " + delcompany.Name +
                     " ?", "Удаление IT-Компании", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
                 if (result == DialogResult.Cancel)
@@ -278,24 +278,24 @@ namespace AcademyGroupMVVM.ViewModels
             }
         }
 
-        private bool CanRemoveGroup()
+        private bool CanRemoveCompany()
         {
-            return Index_selected_groups != -1;
+            return Index_selected_companies != -1;
         }
 
-        private void UpdateGroup()
+        private void UpdateCompany()
         {
             try
             {
                 using (var db = new CompanyContext())
                 {
-                    var updatecompany = CompaniesList[Index_selected_groups];
+                    var updatecompany = CompaniesList[Index_selected_companies];
                     var query = (from g in db.Companies
                                  where g.Name == updatecompany.Name
                                  select g).Single();
                     query.Name = CompanyName;
                     db.SaveChanges();
-                    CompaniesList[Index_selected_groups] = new CompanyViewModel(query);
+                    CompaniesList[Index_selected_companies] = new CompanyViewModel(query);
                     MessageBox.Show("IT-Компания обновлена!");
                 }
             }
@@ -305,32 +305,32 @@ namespace AcademyGroupMVVM.ViewModels
             }           
         }
 
-        private bool CanUpdateGroup()
+        private bool CanUpdateCompany()
         {
-            return !CompanyName.IsNullOrEmpty() && Index_selected_groups != -1;
+            return !CompanyName.IsNullOrEmpty() && Index_selected_companies != -1;
         }
 
-        private DelegateCommand addStudentCommand;
+        private DelegateCommand addEmployeeCommand;
 
-        public ICommand AddStudentCommand
+        public ICommand AddEmployeeCommand
         {
             get
             {
-                if (addStudentCommand == null)
+                if (addEmployeeCommand == null)
                 {
-                    addStudentCommand = new DelegateCommand(param => AddStudent(), param => CanAddStudent());
+                    addEmployeeCommand = new DelegateCommand(param => AddEmployee(), param => CanAddEmployee());
                 }
-                return addStudentCommand;
+                return addEmployeeCommand;
             }
         }
 
-        private void AddStudent()
+        private void AddEmployee()
         {
             try
             {
                 using (var db = new CompanyContext())
                 {
-                    var company = CompaniesList[Index_selected_groups];
+                    var company = CompaniesList[Index_selected_companies];
                     var query = (from g in db.Companies
                                  where g.Name == company.Name
                                  select g).Single();
@@ -357,31 +357,31 @@ namespace AcademyGroupMVVM.ViewModels
             }
         }
 
-        private bool CanAddStudent()
+        private bool CanAddEmployee()
         {
-            return !FirstName.IsNullOrEmpty() && !LastName.IsNullOrEmpty()  && !Position.IsNullOrEmpty() && Index_selected_groups != -1;
+            return !FirstName.IsNullOrEmpty() && !LastName.IsNullOrEmpty()  && !Position.IsNullOrEmpty() && Index_selected_companies != -1;
                 
         }
 
-        private DelegateCommand removeStudentCommand;
+        private DelegateCommand removeEmployeeCommand;
 
-        public ICommand RemoveStudentCommand
+        public ICommand RemoveEmployeeCommand
         {
             get
             {
-                if (removeStudentCommand == null)
+                if (removeEmployeeCommand == null)
                 {
-                    removeStudentCommand = new DelegateCommand(param => RemoveStudent(), param => CanRemoveStudent());
+                    removeEmployeeCommand = new DelegateCommand(param => RemoveEmployee(), param => CanRemoveEmployee());
                 }
-                return removeStudentCommand;
+                return removeEmployeeCommand;
             }
         }
 
-        private void RemoveStudent()
+        private void RemoveEmployee()
         {
             try
             {
-                var delemployee = EmployeesList[Index_selected_students];
+                var delemployee = EmployeesList[Index_selected_employees];
                 DialogResult result = MessageBox.Show("Вы действительно желаете удалить работника " + delemployee.LastName +
                     " ?", "Удаление работника", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
                 if (result == DialogResult.Cancel)
@@ -403,36 +403,36 @@ namespace AcademyGroupMVVM.ViewModels
             }
         }
 
-        private bool CanRemoveStudent()
+        private bool CanRemoveEmployee()
         {
-            return Index_selected_students != -1;
+            return Index_selected_employees != -1;
         }
 
-        private DelegateCommand updateStudentCommand;
+        private DelegateCommand updateEmployeeCommand;
 
-        public ICommand UpdateStudentCommand
+        public ICommand UpdateEmployeeCommand
         {
             get
             {
-                if (updateStudentCommand == null)
+                if (updateEmployeeCommand == null)
                 {
-                    updateStudentCommand = new DelegateCommand(param => UpdateStudent(), param => CanUpdateStudent());
+                    updateEmployeeCommand = new DelegateCommand(param => UpdateEmployee(), param => CanUpdateEmployee());
                 }
-                return updateStudentCommand;
+                return updateEmployeeCommand;
             }
         }
 
-        private void UpdateStudent()
+        private void UpdateEmployee()
         {
             try
             {
                 using (var db = new CompanyContext())
                 {
-                    var company = CompaniesList[Index_selected_groups];
+                    var company = CompaniesList[Index_selected_companies];
                     var query = (from g in db.Companies
                                  where g.Name == company.Name
                                  select g).Single();
-                    var updateemployee = EmployeesList[Index_selected_students];
+                    var updateemployee = EmployeesList[Index_selected_employees];
                     if (query == null)
                         return;
 
@@ -446,7 +446,7 @@ namespace AcademyGroupMVVM.ViewModels
                     employee.Age = age;
                     employee.Position = pos;
                     db.SaveChanges();
-                    EmployeesList[Index_selected_students] = new EmployeeViewModel(employee);
+                    EmployeesList[Index_selected_employees] = new EmployeeViewModel(employee);
                     MessageBox.Show("Данные о работнике изменены!");
                 }
             }
@@ -456,10 +456,10 @@ namespace AcademyGroupMVVM.ViewModels
             }
         }
 
-        private bool CanUpdateStudent()
+        private bool CanUpdateEmployee()
         {
             return !FirstName.IsNullOrEmpty() && !LastName.IsNullOrEmpty() &&
-                !Position.IsNullOrEmpty() && Index_selected_groups != -1 && Index_selected_students != -1;
+                !Position.IsNullOrEmpty() && Index_selected_companies != -1 && Index_selected_employees != -1;
 
         }
     }
