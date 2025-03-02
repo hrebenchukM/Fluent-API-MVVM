@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.IO;
-using Microsoft.EntityFrameworkCore;
 using System;
 
 namespace AcademyGroupMVVM.Models
@@ -25,32 +24,21 @@ namespace AcademyGroupMVVM.Models
             string connectionString = config.GetConnectionString("DefaultConnection");
 
             var optionsBuilder = new DbContextOptionsBuilder<CompanyContext>();
-            _options = optionsBuilder.UseLazyLoadingProxies().UseSqlServer(connectionString).Options;
-        }
-        public CompanyContext() : base(_options)
-        {
-           
-            if (Database.EnsureCreated())
-            {
-                Company company1 = new Company { Name = "Luxoft" };
-                Company company2 = new Company { Name = "Rozetka" };
-                Company company3 = new Company { Name = "DataArt" };
-                Companies?.Add(company1);
-                Companies?.Add(company2);
-                Companies?.Add(company3);
-                Employees?.Add(new Employee { FirstName = "Богдан", LastName = "Иваненко", Age = 20, Position = "Fullstack developer", Company = company1 });
-                Employees?.Add(new Employee { FirstName = "Анна", LastName = "Шевченко", Age = 23, Position = "Front-end developer", Company = company2 });
-                Employees?.Add(new Employee { FirstName = "Петро", LastName = "Петренко", Age = 25, Position = "Backend developer", Company = company3 });
-                Employees?.Add(new Employee { FirstName = "Елена", LastName = "Артемьева", Age = 42, Position = "Manual QA Engineer", Company = company1 });
-                Employees?.Add(new Employee { FirstName = "Елена", LastName = "Алексеева", Age = 47, Position = "Automation QA Engineer", Company = company2 });
-                Employees?.Add(new Employee { FirstName = "Виктория", LastName = "Бабенко", Age = 29, Position = "Team Lead", Company = company3 });
+            _options = optionsBuilder.UseSqlServer(connectionString).Options;
 
-                SaveChanges();
-            }
         }
+
 
         public DbSet<Company> Companies { get; set; }
         public DbSet<Employee> Employees { get; set; }
+        public CompanyContext() : base(_options)
+        {
+            Database.EnsureDeleted();
+            Database.EnsureCreated();
+
+        }
+        
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -63,6 +51,9 @@ namespace AcademyGroupMVVM.Models
             modelBuilder.Entity<Employee>().HasKey(p => p.Ident);
             modelBuilder.Entity<Company>().HasKey(p => p.Ident);
 
+            // Установим связь Один ко Многим между объектом AcademyGroup и объектами Student 
+            modelBuilder.Entity<Employee>().HasOne(p => p.Company).WithMany(t => t.Employees).OnDelete(DeleteBehavior.Cascade);
+
 
             // Сопоставление свойств
             modelBuilder.Entity<Employee>().Property(p => p.FirstName).HasColumnName("EmployeeName");
@@ -72,8 +63,6 @@ namespace AcademyGroupMVVM.Models
             .ToTable(t => t.HasCheckConstraint("Age", "Age >= 18 AND Age < 80"));
             modelBuilder.Entity<Employee>().Property(p => p.Position).HasColumnName("EmployeePosition");
            
-
-
 
             // Значение для столбца и свойства требуется обязательно
             modelBuilder.Entity<Employee>().Property(p => p.FirstName).IsRequired();
@@ -91,10 +80,7 @@ namespace AcademyGroupMVVM.Models
             modelBuilder.Entity<Employee>().Property(p => p.Position).HasColumnType("varchar").HasMaxLength(20);
 
 
-            // Установим связь Один ко Многим между объектом AcademyGroup и объектами Student 
-
-            modelBuilder.Entity<Employee>().HasOne(p => p.Company).WithMany(t => t.Employees).OnDelete(DeleteBehavior.Cascade);
-
+       
             base.OnModelCreating(modelBuilder);
         }
     }
