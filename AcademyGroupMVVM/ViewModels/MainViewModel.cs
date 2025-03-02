@@ -10,13 +10,84 @@ namespace AcademyGroupMVVM.ViewModels
     class MainViewModel : ViewModelBase
     {
         public ObservableCollection<CompanyViewModel> CompaniesList { get; set; }
-        public ObservableCollection<EmployeeViewModel> EmployeesList { get; set; }
+        public ObservableCollection<EmployeeViewModel> AllEmployeesList { get; set; }
+        public ObservableCollection<EmployeeViewModel> FilteredEmployeesList { get; set; }
+
+        public ObservableCollection<EmployeeViewModel> EmployeesToDisplay
+        {
+            get
+            {
+                if (IsSearching)
+                    return FilteredEmployeesList;
+                else
+                    return AllEmployeesList;
+            }
+        }
 
         public MainViewModel(IQueryable<Company> companies, IQueryable<Employee> employees)
         {
             CompaniesList = new ObservableCollection<CompanyViewModel>(companies.Select(c => new CompanyViewModel(c)));
-            EmployeesList = new ObservableCollection<EmployeeViewModel>(employees.Select(e => new EmployeeViewModel(e))); 
+            AllEmployeesList = new ObservableCollection<EmployeeViewModel>(employees.Select(e => new EmployeeViewModel(e)));
+            FilteredEmployeesList = new ObservableCollection<EmployeeViewModel>(AllEmployeesList);
         }
+
+
+        private bool isSearching;
+        public bool IsSearching
+        {
+            get { return isSearching; }
+            set
+            {
+                isSearching = value;
+                OnPropertyChanged(nameof(IsSearching));
+                OnPropertyChanged(nameof(EmployeesToDisplay));
+            }
+        }
+
+
+        private string searchName;
+        public string SearchName
+        {
+            get
+            {
+                return searchName;
+            }
+            set
+            {
+                searchName = value;
+                OnPropertyChanged(nameof(SearchName));
+            }
+        }
+
+
+        private string searchLastName;
+        public string SearchLastName
+        {
+            get
+            {
+                return searchLastName;
+            }
+            set
+            {
+                searchLastName = value;
+                OnPropertyChanged(nameof(SearchLastName));
+            }
+        }
+
+        private string searchPosition;
+        public string SearchPosition
+        {
+            get
+            {
+                return searchPosition;
+            }
+            set
+            {
+                searchPosition = value;
+                OnPropertyChanged(nameof(SearchPosition));
+            }
+        }
+
 
         private string name;
 
@@ -116,6 +187,41 @@ namespace AcademyGroupMVVM.ViewModels
                 OnPropertyChanged(nameof(Position));
             }
         }
+        private DelegateCommand searchEmployeeCommand;
+
+        public ICommand SearchEmployeeCommand
+        {
+            get
+            {
+                if (searchEmployeeCommand == null)
+                {
+                    searchEmployeeCommand = new DelegateCommand(param => SearchEmployee(), null);
+                }
+                return searchEmployeeCommand;
+            }
+        }
+        private void SearchEmployee()
+        {
+            try
+            {
+                IsSearching = true;
+                using (var db = new CompanyContext())
+                {
+                    var employees = from e in db.Employees
+                                    where (string.IsNullOrEmpty(SearchName) || e.FirstName.Contains(SearchName)) &&
+                                          (string.IsNullOrEmpty(SearchLastName) || e.LastName.Contains(SearchLastName)) &&
+                                          (string.IsNullOrEmpty(SearchPosition) || e.Position.Contains(SearchPosition))
+                                    select e;
+                    FilteredEmployeesList = new ObservableCollection<EmployeeViewModel>(employees.Select(e => new EmployeeViewModel(e)));
+                    OnPropertyChanged(nameof(FilteredEmployeesList));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
 
         private DelegateCommand refreshCompanyCommand;
 
@@ -167,6 +273,8 @@ namespace AcademyGroupMVVM.ViewModels
         {
             try
             {
+                IsSearching = false;
+
                 using (var db = new CompanyContext())
                 {
                     var companies = from g in db.Companies
@@ -174,9 +282,10 @@ namespace AcademyGroupMVVM.ViewModels
                     var employees = from st in db.Employees
                                    select st;
                     CompaniesList = new ObservableCollection<CompanyViewModel>(companies.Select(g => new CompanyViewModel(g)));
-                    EmployeesList = new ObservableCollection<EmployeeViewModel>(employees.Select(st => new EmployeeViewModel(st)));
+                    AllEmployeesList = new ObservableCollection<EmployeeViewModel>(employees.Select(st => new EmployeeViewModel(st)));
                     OnPropertyChanged(nameof(CompaniesList));
-                    OnPropertyChanged(nameof(EmployeesList));
+                    OnPropertyChanged(nameof(AllEmployeesList));
+                    OnPropertyChanged(nameof(FilteredEmployeesList));
                 }
             }
             catch (Exception ex)
@@ -346,7 +455,7 @@ namespace AcademyGroupMVVM.ViewModels
                     db.Employees.Add(employee);
                     db.SaveChanges();
                     var employeeviewmodel = new EmployeeViewModel(employee);
-                    EmployeesList.Add(employeeviewmodel);
+                    AllEmployeesList.Add(employeeviewmodel);
 
                     MessageBox.Show("Работник добавлен!");
                 }
@@ -381,7 +490,7 @@ namespace AcademyGroupMVVM.ViewModels
         {
             try
             {
-                var delemployee = EmployeesList[Index_selected_employees];
+                var delemployee = AllEmployeesList[Index_selected_employees];
                 DialogResult result = MessageBox.Show("Вы действительно желаете удалить работника " + delemployee.LastName +
                     " ?", "Удаление работника", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
                 if (result == DialogResult.Cancel)
@@ -393,7 +502,7 @@ namespace AcademyGroupMVVM.ViewModels
                                 select st;
                     db.Employees.RemoveRange(query);
                     db.SaveChanges();
-                    EmployeesList.Remove(delemployee);
+                    AllEmployeesList.Remove(delemployee);
                     MessageBox.Show("Работник удален!");
                 }
             }
@@ -432,7 +541,7 @@ namespace AcademyGroupMVVM.ViewModels
                     var query = (from g in db.Companies
                                  where g.Name == company.Name
                                  select g).Single();
-                    var updateemployee = EmployeesList[Index_selected_employees];
+                    var updateemployee = AllEmployeesList[Index_selected_employees];
                     if (query == null)
                         return;
 
@@ -446,7 +555,7 @@ namespace AcademyGroupMVVM.ViewModels
                     employee.Age = age;
                     employee.Position = pos;
                     db.SaveChanges();
-                    EmployeesList[Index_selected_employees] = new EmployeeViewModel(employee);
+                    AllEmployeesList[Index_selected_employees] = new EmployeeViewModel(employee);
                     MessageBox.Show("Данные о работнике изменены!");
                 }
             }
