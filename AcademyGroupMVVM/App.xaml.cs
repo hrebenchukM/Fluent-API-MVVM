@@ -11,12 +11,12 @@ namespace AcademyGroupMVVM
         {
             try
             {
-                using (var db = new AcademyGroupContext())
+                using (var db = new CompanyContext())
                 {
-                    var groups = from g in db.AcademyGroups
-                                select g;
-                    var students = from st in db.Students
-                                 select st;
+                    var groups = from g in db.Companies
+                                 select g;
+                    var students = from st in db.Employees
+                                   select st;
                     MainWindow view = new MainWindow();
                     MainViewModel viewModel = new MainViewModel(groups, students);
                     view.DataContext = viewModel;

@@ -9,18 +9,18 @@ namespace AcademyGroupMVVM.ViewModels
 {
     class MainViewModel : ViewModelBase
     {
-        public ObservableCollection<GroupViewModel> GroupsList { get; set; }
-        public ObservableCollection<StudentViewModel> StudentsList { get; set; }
+        public ObservableCollection<CompanyViewModel> CompaniesList { get; set; }
+        public ObservableCollection<EmployeeViewModel> EmployeesList { get; set; }
 
-        public MainViewModel(IQueryable<AcademyGroup> groups, IQueryable<Student> students)
+        public MainViewModel(IQueryable<Company> companies, IQueryable<Employee> employees)
         {
-            GroupsList = new ObservableCollection<GroupViewModel>(groups.Select(g => new GroupViewModel(g)));
-            StudentsList = new ObservableCollection<StudentViewModel>(students.Select(st => new StudentViewModel(st))); 
+            CompaniesList = new ObservableCollection<CompanyViewModel>(companies.Select(c => new CompanyViewModel(c)));
+            EmployeesList = new ObservableCollection<EmployeeViewModel>(employees.Select(e => new EmployeeViewModel(e))); 
         }
 
         private string name;
 
-        public string GroupName
+        public string CompanyName
         {
             get
             {
@@ -29,7 +29,7 @@ namespace AcademyGroupMVVM.ViewModels
             set
             {
                 name = value;
-                OnPropertyChanged(nameof(GroupName));
+                OnPropertyChanged(nameof(CompanyName));
             }
         }
 
@@ -87,9 +87,9 @@ namespace AcademyGroupMVVM.ViewModels
             }
         }
 
-        private int? age;
+        private int age;
 
-        public int? Age
+        public int Age
         {
             get
             {
@@ -102,18 +102,18 @@ namespace AcademyGroupMVVM.ViewModels
             }
         }
 
-        private double? gpa;
+        private string pos;
 
-        public double? GPA
+        public string Position
         {
             get
             {
-                return gpa;
+                return pos;
             }
             set
             {
-                gpa = value;
-                OnPropertyChanged(nameof(GPA));
+                pos = value;
+                OnPropertyChanged(nameof(Position));
             }
         }
 
@@ -135,12 +135,12 @@ namespace AcademyGroupMVVM.ViewModels
         {
             try
             {
-                using (var db = new AcademyGroupContext())
+                using (var db = new CompanyContext())
                 {
-                    var groups = from g in db.AcademyGroups
+                    var groups = from g in db.Companies
                                  select g;
-                    GroupsList = new ObservableCollection<GroupViewModel>(groups.Select(g => new GroupViewModel(g)));
-                    OnPropertyChanged(nameof(GroupsList));
+                    CompaniesList = new ObservableCollection<CompanyViewModel>(groups.Select(g => new CompanyViewModel(g)));
+                    OnPropertyChanged(nameof(CompaniesList));
                 }
             }
             catch (Exception ex)
@@ -167,16 +167,16 @@ namespace AcademyGroupMVVM.ViewModels
         {
             try
             {
-                using (var db = new AcademyGroupContext())
+                using (var db = new CompanyContext())
                 {
-                    var groups = from g in db.AcademyGroups
+                    var groups = from g in db.Companies
                                  select g;
-                    var students = from st in db.Students
+                    var students = from st in db.Employees
                                    select st;
-                    GroupsList = new ObservableCollection<GroupViewModel>(groups.Select(g => new GroupViewModel(g)));
-                    StudentsList = new ObservableCollection<StudentViewModel>(students.Select(st => new StudentViewModel(st)));
-                    OnPropertyChanged(nameof(GroupsList));
-                    OnPropertyChanged(nameof(StudentsList));
+                    CompaniesList = new ObservableCollection<CompanyViewModel>(groups.Select(g => new CompanyViewModel(g)));
+                    EmployeesList = new ObservableCollection<EmployeeViewModel>(students.Select(st => new EmployeeViewModel(st)));
+                    OnPropertyChanged(nameof(CompaniesList));
+                    OnPropertyChanged(nameof(EmployeesList));
                 }
             }
             catch (Exception ex)
@@ -231,14 +231,14 @@ namespace AcademyGroupMVVM.ViewModels
         {
             try
             {
-                using (var db = new AcademyGroupContext())
+                using (var db = new CompanyContext())
                 {
-                    var academygroup = new AcademyGroup { Name = GroupName };
-                    db.AcademyGroups.Add(academygroup);
+                    var company = new Company { Name = CompanyName };
+                    db.Companies.Add(company);
                     db.SaveChanges();
-                    var groupviewmodel = new GroupViewModel(academygroup);
-                    GroupsList.Add(groupviewmodel);
-                    MessageBox.Show("Группа добавлена!");
+                    var companyviewmodel = new CompanyViewModel(company);
+                    CompaniesList.Add(companyviewmodel);
+                    MessageBox.Show("IT-Компания добавлена!");
                 }
             }
             catch (Exception ex)
@@ -249,27 +249,27 @@ namespace AcademyGroupMVVM.ViewModels
 
         private bool CanAddGroup()
         {
-            return !GroupName.IsNullOrEmpty();
+            return !CompanyName.IsNullOrEmpty();
         }
 
         private void RemoveGroup()
         {
             try
             {
-                var delgroup = GroupsList[Index_selected_groups];
-                DialogResult result = MessageBox.Show("Вы действительно желаете удалить группу " + delgroup.Name +
-                    " ?", "Удаление группы", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                var delcompany = CompaniesList[Index_selected_groups];
+                DialogResult result = MessageBox.Show("Вы действительно желаете удалить IT-Компанию " + delcompany.Name +
+                    " ?", "Удаление IT-Компании", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
                 if (result == DialogResult.Cancel)
                     return;
-                using (var db = new AcademyGroupContext())
+                using (var db = new CompanyContext())
                 {
-                    var query = (from g in db.AcademyGroups
-                                where g.Name == delgroup.Name
+                    var query = (from g in db.Companies
+                                 where g.Name == delcompany.Name
                                 select g).Single();
-                    db.AcademyGroups.Remove(query);
+                    db.Companies.Remove(query);
                     db.SaveChanges();
-                    GroupsList.Remove(delgroup);
-                    MessageBox.Show("Группа удалена!");
+                    CompaniesList.Remove(delcompany);
+                    MessageBox.Show("IT-Компания удалена!");
                 }
             }
             catch (Exception ex)
@@ -287,16 +287,16 @@ namespace AcademyGroupMVVM.ViewModels
         {
             try
             {
-                using (var db = new AcademyGroupContext())
+                using (var db = new CompanyContext())
                 {
-                    var updategroup = GroupsList[Index_selected_groups];
-                    var query = (from g in db.AcademyGroups
-                                 where g.Name == updategroup.Name
+                    var updatecompany = CompaniesList[Index_selected_groups];
+                    var query = (from g in db.Companies
+                                 where g.Name == updatecompany.Name
                                  select g).Single();
-                    query.Name = GroupName;
+                    query.Name = CompanyName;
                     db.SaveChanges();
-                    GroupsList[Index_selected_groups] = new GroupViewModel(query);
-                    MessageBox.Show("Группа обновлена!");
+                    CompaniesList[Index_selected_groups] = new CompanyViewModel(query);
+                    MessageBox.Show("IT-Компания обновлена!");
                 }
             }
             catch (Exception ex)
@@ -307,7 +307,7 @@ namespace AcademyGroupMVVM.ViewModels
 
         private bool CanUpdateGroup()
         {
-            return !GroupName.IsNullOrEmpty() && Index_selected_groups != -1;
+            return !CompanyName.IsNullOrEmpty() && Index_selected_groups != -1;
         }
 
         private DelegateCommand addStudentCommand;
@@ -328,27 +328,27 @@ namespace AcademyGroupMVVM.ViewModels
         {
             try
             {
-                using (var db = new AcademyGroupContext())
+                using (var db = new CompanyContext())
                 {
-                    var academygroup = GroupsList[Index_selected_groups];
-                    var query = (from g in db.AcademyGroups
-                                 where g.Name == academygroup.Name
+                    var company = CompaniesList[Index_selected_groups];
+                    var query = (from g in db.Companies
+                                 where g.Name == company.Name
                                  select g).Single();
 
-                    var student = new Student
+                    var employee = new Employee
                     {
                         FirstName = firstname,
                         LastName = lastname,
                         Age = age,
-                        GPA = gpa,
-                        AcademyGroup = query
+                        Position = pos,
+                        Company = query
                     };
-                    db.Students.Add(student);
+                    db.Employees.Add(employee);
                     db.SaveChanges();
-                    var studentviewmodel = new StudentViewModel(student);
-                    StudentsList.Add(studentviewmodel);
+                    var employeeviewmodel = new EmployeeViewModel(employee);
+                    EmployeesList.Add(employeeviewmodel);
 
-                    MessageBox.Show("Студент добавлен!");
+                    MessageBox.Show("Работник добавлен!");
                 }
             }
             catch (Exception ex)
@@ -359,7 +359,7 @@ namespace AcademyGroupMVVM.ViewModels
 
         private bool CanAddStudent()
         {
-            return !FirstName.IsNullOrEmpty() && !LastName.IsNullOrEmpty() && Age.HasValue && GPA.HasValue && Index_selected_groups != -1;
+            return !FirstName.IsNullOrEmpty() && !LastName.IsNullOrEmpty()  && !Position.IsNullOrEmpty() && Index_selected_groups != -1;
                 
         }
 
@@ -381,20 +381,20 @@ namespace AcademyGroupMVVM.ViewModels
         {
             try
             {
-                var delstudent = StudentsList[Index_selected_students];
-                DialogResult result = MessageBox.Show("Вы действительно желаете удалить студента " + delstudent.LastName +
-                    " ?", "Удаление группы", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                var delemployee = EmployeesList[Index_selected_students];
+                DialogResult result = MessageBox.Show("Вы действительно желаете удалить работника " + delemployee.LastName +
+                    " ?", "Удаление работника", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
                 if (result == DialogResult.Cancel)
                     return;
-                using (var db = new AcademyGroupContext())
+                using (var db = new CompanyContext())
                 {
-                    var query = from st in db.Students
-                                where st.LastName == delstudent.LastName
+                    var query = from st in db.Employees
+                                where st.LastName == delemployee.LastName
                                 select st;
-                    db.Students.RemoveRange(query);
+                    db.Employees.RemoveRange(query);
                     db.SaveChanges();
-                    StudentsList.Remove(delstudent);
-                    MessageBox.Show("Студент удален!");
+                    EmployeesList.Remove(delemployee);
+                    MessageBox.Show("Работник удален!");
                 }
             }
             catch (Exception ex)
@@ -426,28 +426,28 @@ namespace AcademyGroupMVVM.ViewModels
         {
             try
             {
-                using (var db = new AcademyGroupContext())
+                using (var db = new CompanyContext())
                 {
-                    var academygroup = GroupsList[Index_selected_groups];
-                    var group = (from g in db.AcademyGroups
-                                 where g.Name == academygroup.Name
+                    var company = CompaniesList[Index_selected_groups];
+                    var query = (from g in db.Companies
+                                 where g.Name == company.Name
                                  select g).Single();
-                    var updatestudent = StudentsList[Index_selected_students];
-                    if (group == null)
+                    var updateemployee = EmployeesList[Index_selected_students];
+                    if (query == null)
                         return;
 
-                    var student = (from st in db.Students
-                                  where st.LastName == updatestudent.LastName
+                    var employee = (from st in db.Employees
+                                   where st.LastName == updateemployee.LastName
                                   select st).Single();
 
-                    student.AcademyGroup = group;
-                    student.FirstName = firstname;
-                    student.LastName = lastname;
-                    student.Age = age;
-                    student.GPA = gpa;
+                    employee.Company = query;
+                    employee.FirstName = firstname;
+                    employee.LastName = lastname;
+                    employee.Age = age;
+                    employee.Position = pos;
                     db.SaveChanges();
-                    StudentsList[Index_selected_students] = new StudentViewModel(student);
-                    MessageBox.Show("Данные о студенте изменены!");
+                    EmployeesList[Index_selected_students] = new EmployeeViewModel(employee);
+                    MessageBox.Show("Данные о работнике изменены!");
                 }
             }
             catch (Exception ex)
@@ -458,8 +458,8 @@ namespace AcademyGroupMVVM.ViewModels
 
         private bool CanUpdateStudent()
         {
-            return !FirstName.IsNullOrEmpty() && !LastName.IsNullOrEmpty() && Age.HasValue && 
-                GPA.HasValue && Index_selected_groups != -1 && Index_selected_students != -1;
+            return !FirstName.IsNullOrEmpty() && !LastName.IsNullOrEmpty() &&
+                !Position.IsNullOrEmpty() && Index_selected_groups != -1 && Index_selected_students != -1;
 
         }
     }

@@ -5,80 +5,92 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AcademyGroupMVVM"
         mc:Ignorable="d"
-        Title="MainWindow" MinWidth="500" MaxHeight="300">
-    <Grid>
+        Title="Управление персоналом IT-компании" MinWidth="800" MinHeight="600" Background="#1E1E1E" Foreground="White">
+    <Grid Margin="20">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition />
-            <ColumnDefinition />
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel>
-            <TextBlock Text="Название группы:" />
-            <TextBox Text="{Binding GroupName, UpdateSourceTrigger=PropertyChanged}"/>
-            <Button Content="Добавить" Command="{Binding AddGroupCommand}"  />
-            <Button Content="Удалить"  Command="{Binding RemoveGroupCommand}" />
-            <Button Content="Изменить" Command="{Binding UpdateGroupCommand}" />
-            <Button Content="Список групп" Command="{Binding RefreshGroupCommand}" />
-            <ComboBox ItemsSource="{Binding GroupsList}" IsSynchronizedWithCurrentItem="True" SelectedIndex="{Binding  Index_selected_groups}">
+        <Border Background="#2C2C2C" CornerRadius="15" Padding="20" Margin="10" Grid.Column="0">
+            <StackPanel>
+                <TextBlock Text="Название группы:" FontSize="16" FontWeight="Bold" Foreground="#BB86FC"/>
+                <TextBox Text="{Binding GroupName, UpdateSourceTrigger=PropertyChanged}" Padding="10" Margin="0,5,0,15" BorderBrush="#BB86FC" BorderThickness="2" Background="#2D2D2D" Foreground="White"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Content="Добавить" Command="{Binding AddGroupCommand}" Background="#03DAC5" Foreground="Black" Padding="10,5"/>
+                    <Button Content="Удалить" Command="{Binding RemoveGroupCommand}" Margin="5,0" Background="#CF6679" Foreground="White" Padding="10,5"/>
+                    <Button Content="Изменить" Command="{Binding UpdateGroupCommand}" Background="#F4B400" Foreground="Black" Padding="10,5"/>
+                </StackPanel>
+                <Button Content="Список групп" Command="{Binding RefreshGroupCommand}" Background="#BB86FC" Foreground="White" Padding="10,5" Margin="5,10"/>
+
+                <ComboBox ItemsSource="{Binding GroupsList}" IsSynchronizedWithCurrentItem="True" SelectedIndex="{Binding Index_selected_groups}" Background="#2D2D2D" Foreground="White">
+                    
+                    <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                            <Border BorderBrush="#BB86FC" BorderThickness="1" Padding="5" CornerRadius="5">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Группа: " FontWeight="Bold" Foreground="#BB86FC"/>
+                                    <TextBlock Text="{Binding Name}" FontWeight="Bold" Foreground="#03DAC5"/>
+                                </StackPanel>
+                            </Border>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+        </Border>
+        <Border Background="#2C2C2C" CornerRadius="15" Padding="20" Margin="10" Grid.Column="1">
+          <StackPanel>
+                <StackPanel>
+                    <TextBlock Text="Имя:" FontSize="16" FontWeight="Bold" Foreground="#BB86FC"/>
+                    <TextBox Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}" Padding="10" Margin="0,5,0,10" BorderBrush="#BB86FC" BorderThickness="2" Background="#2D2D2D" Foreground="White"/>
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock Text="Фамилия:" FontSize="16" FontWeight="Bold" Foreground="#BB86FC"/>
+                    <TextBox Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}" Padding="10" Margin="0,5,0,10" BorderBrush="#BB86FC" BorderThickness="2" Background="#2D2D2D" Foreground="White"/>
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock Text="Возраст:" FontSize="16" FontWeight="Bold" Foreground="#BB86FC"/>
+                    <TextBox Text="{Binding Age, UpdateSourceTrigger=PropertyChanged}" Padding="10" Margin="0,5,0,10" BorderBrush="#BB86FC" BorderThickness="2" Background="#2D2D2D" Foreground="White"/>
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock Text="Средний балл:" FontSize="16" FontWeight="Bold" Foreground="#BB86FC"/>
+                    <TextBox Text="{Binding GPA, UpdateSourceTrigger=PropertyChanged}" Padding="10" Margin="0,5,0,10" BorderBrush="#BB86FC" BorderThickness="2" Background="#2D2D2D" Foreground="White"/>
+                </StackPanel>
+         </StackPanel>
+        </Border>
+        <Border Background="#2C2C2C" CornerRadius="15" Padding="20" Margin="10" Grid.Column="2">
+        <StackPanel >
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
+                    <Button Content="Добавить" Command="{Binding AddStudentCommand}" Background="#03DAC5" Foreground="Black" Padding="10,5" />
+                    <Button Content="Удалить"  Command="{Binding RemoveStudentCommand}"  Background="#CF6679" Margin="5,0"  Foreground="White" Padding="10,5"/>
+                    <Button Content="Изменить" Command="{Binding UpdateStudentCommand}" Background="#F4B400" Foreground="Black" Padding="10,5"/>
+            </StackPanel>
+                <Button Content="Список студентов" Command="{Binding RefreshStudentCommand}" Background="#BB86FC" Foreground="White" Padding="10,5" Margin="5,10" />
+                <ComboBox ItemsSource="{Binding StudentsList}" IsSynchronizedWithCurrentItem="True" SelectedIndex="{Binding  Index_selected_students}"  Background="#2D2D2D" Foreground="White">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
-                        <Border BorderBrush="Bisque" BorderThickness="1" Margin="10">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Группа: " FontWeight="Bold"/>
-                                <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
+                            <Border BorderBrush="#BB86FC" BorderThickness="1" Padding="10" CornerRadius="5">
+                                <StackPanel Margin="10">
+                                    <TextBlock Text="{Binding FirstName}" FontSize="16" FontWeight="Bold" Foreground="#03DAC5"/>
+                                    <TextBlock Text="{Binding LastName}" FontSize="16" FontWeight="Bold" Foreground="#BB86FC"/>
+                                <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Возраст:" FontSize="14" Foreground="Black" />
+                                        <TextBlock Text="{Binding Age}" FontSize="14" Foreground="Black"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Средний балл:" FontSize="14" Foreground="Black" />
+                                        <TextBlock Text="{Binding GPA}" FontSize="14" Foreground="Black"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Группа:" FontSize="14" Foreground="Black"/>
+                                        <TextBlock Text="{Binding GroupName}" FontSize="14" Foreground="Black"/>
+                                </StackPanel>
                             </StackPanel>
                         </Border>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
         </StackPanel>
-        <StackPanel Grid.Column="1">
-            <StackPanel>
-                <TextBlock Text="Имя:" />
-                <TextBox Text="{Binding FirstName, UpdateSourceTrigger=PropertyChanged}" MinWidth="150"/>
-            </StackPanel>
-            <StackPanel>
-                <TextBlock Text="Фамилия:" />
-                <TextBox Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}" MinWidth="150"/>
-            </StackPanel>
-            <StackPanel>
-                <TextBlock Text="Возраст:" />
-                <TextBox Text="{Binding Age, UpdateSourceTrigger=PropertyChanged}" MinWidth="150"/>
-            </StackPanel>
-            <StackPanel>
-                <TextBlock Text="Средний балл:" />
-                <TextBox Text="{Binding GPA, UpdateSourceTrigger=PropertyChanged}"  MinWidth="150"/>
-            </StackPanel>
-        </StackPanel>
-        <StackPanel Margin="10" Grid.Column="2">
-            <Button Content="Добавить" Command="{Binding AddStudentCommand}" />
-            <Button Content="Удалить"  Command="{Binding RemoveStudentCommand}" />
-            <Button Content="Изменить" Command="{Binding UpdateStudentCommand}" />
-            <Button Content="Список студентов" Command="{Binding RefreshStudentCommand}" />
-            <ComboBox ItemsSource="{Binding StudentsList}" IsSynchronizedWithCurrentItem="True" SelectedIndex="{Binding  Index_selected_students}">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <Border BorderBrush="Bisque" BorderThickness="1" Margin="10">
-                            <StackPanel Margin="10">
-                                <TextBlock Text="{Binding FirstName}"/>
-                                <TextBlock Text="{Binding LastName}" />
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Возраст:" />
-                                    <TextBlock Text="{Binding Age}" Margin="10,0"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Средний балл:" />
-                                    <TextBlock Text="{Binding GPA}" Margin="10,0"/>
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Группа:" />
-                                    <TextBlock Text="{Binding GroupName}" Margin="10,0"/>
-                                </StackPanel>
-                            </StackPanel>
-                        </Border>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-        </StackPanel>
+       </Border>
     </Grid>
 </Window>

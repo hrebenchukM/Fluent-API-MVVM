@@ -1,21 +1,21 @@
 ﻿using AcademyGroupMVVM.Models;
 namespace AcademyGroupMVVM.ViewModels
 {
-    public class GroupViewModel : ViewModelBase
+    public class CompanyViewModel : ViewModelBase
     {
-        private AcademyGroup Group;
+        private Company Company;
 
-        public GroupViewModel(AcademyGroup group)
+        public CompanyViewModel(Company company)
         {
-            Group = group;
+            Company = company;
         }
 
         public string Name
         {
-            get { return Group.Name!; }
+            get { return Company.Name!; }
             set
             {
-                Group.Name = value;
+                Company.Name = value;
                 OnPropertyChanged(nameof(Name));
             }
         }
